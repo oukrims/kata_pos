@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { CheckoutService } from '../services/checkout.service';
 import { ProductService } from '../services/product.service';
 import { PromoService } from '../services/promotion.service';
-import { BuyNGetMOffSpecial, NForXSpecial } from '../core/types';
 
 describe('CheckoutService', () => {
   let checkout: CheckoutService;
@@ -51,7 +50,7 @@ describe('CheckoutService', () => {
       createdAt: new Date()
     });
 
-    promoService.addPromo({
+    promoService.addBuyNGetMOffPromo({
       type: 'buyNgetMoff',
       productId: cereal.id,
       validFrom: new Date(Date.now() - 1000),
@@ -78,7 +77,7 @@ describe('CheckoutService', () => {
       createdAt: new Date()
     });
 
-    promoService.addPromo({
+    promoService.addNForXPromo({
       type: 'nForX',
       productId: soup.id,
       validFrom: new Date(Date.now() - 1000),
@@ -165,7 +164,7 @@ describe('CheckoutService', () => {
       createdAt: new Date()
     });
 
-    promoService.addPromo({
+    promoService.addBuyNGetMOffPromo({
       type: 'buyNgetMoff',
       productId: cereal.id,
       validFrom: new Date(Date.now() - 1000),

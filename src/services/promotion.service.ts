@@ -1,4 +1,4 @@
-import { Markdown, Promotion } from '../core/types';
+import { Markdown, Promotion, BuyNGetMOffSpecial, NForXSpecial, WeightedSpecial } from '../core/types';
 import { IPromoService } from '../interfaces';
 import { generateId, validateMarkdown, validatePromotion } from '../core/utils';
 
@@ -49,6 +49,18 @@ export class PromoService implements IPromoService {
 
     this.promotions.set(newPromo.id, newPromo);
     return newPromo;
+  }
+
+  addBuyNGetMOffPromo(promo: Omit<BuyNGetMOffSpecial, 'id' | 'createdAt' | 'updatedAt'>): BuyNGetMOffSpecial {
+    return this.addPromo(promo) as BuyNGetMOffSpecial;
+  }
+
+  addNForXPromo(promo: Omit<NForXSpecial, 'id' | 'createdAt' | 'updatedAt'>): NForXSpecial {
+    return this.addPromo(promo) as NForXSpecial;
+  }
+
+  addWeightedPromo(promo: Omit<WeightedSpecial, 'id' | 'createdAt' | 'updatedAt'>): WeightedSpecial {
+    return this.addPromo(promo) as WeightedSpecial;
   }
 
   getActivePromos(productId: string): Promotion[] {
