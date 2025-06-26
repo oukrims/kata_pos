@@ -20,6 +20,12 @@ function convertZodError(error: z.ZodError): ValidationError {
   return new ValidationError(field, value, constraint);
 }
 
+
+export function isPromotionValid(promo: { isActive: boolean; validFrom: Date; validTo: Date }): boolean {
+  const now = new Date();
+  return promo.isActive && promo.validFrom <= now && promo.validTo >= now;
+}
+
 export function validateProduct(product: Omit<Product, 'id'>): void {
   try {
     createProductSchema.parse(product);
@@ -31,7 +37,7 @@ export function validateProduct(product: Omit<Product, 'id'>): void {
   }
 }
 
-export function validateMarkdown(markdown: Omit<Markdown, 'id'>): void {
+export function validateMarkdown(markdown: Omit<Markdown, 'id' | 'createdAt' | 'updatedAt'>): void {
   try {
     createMarkdownSchema.parse(markdown);
   } catch (error) {
@@ -42,7 +48,7 @@ export function validateMarkdown(markdown: Omit<Markdown, 'id'>): void {
   }
 }
 
-export function validatePromotion(promotion: Omit<Promotion, 'id'>): void {
+export function validatePromotion(promotion: Omit<Promotion, 'id' | 'createdAt' | 'updatedAt'>): void {
   try {
     createPromotionSchema.parse(promotion);
   } catch (error) {

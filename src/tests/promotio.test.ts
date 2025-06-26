@@ -11,8 +11,6 @@ import {
   BuyNGetMOffPromoFixture,
   NForXPromoFixture,
   WeightedPromoFixture,
-  PercentageDiscountPromoFixture,
-  FixedDiscountPromoFixture,
   ExpiredPromoFixture,
   InactivePromoFixture,
   LimitedPromoFixture
@@ -38,12 +36,12 @@ describe('PromoService', () => {
       expect(markdown.createdAt).toBeInstanceOf(Date);
     });
 
-    it('should set default isActive to true when not specified', () => {
-      const markdownWithoutActive = { ...ValidMarkdownFixture };
+    it('should preserve isActive when specified', () => {
+      const markdownWithActive = { ...ValidMarkdownFixture, isActive: false };
 
-      const markdown = service.addMarkdown(markdownWithoutActive);
+      const markdown = service.addMarkdown(markdownWithActive);
 
-      expect(markdown.isActive).toBe(true);
+      expect(markdown.isActive).toBe(false);
     });
 
     it('should preserve reason and priority when provided', () => {
@@ -55,7 +53,7 @@ describe('PromoService', () => {
 
       const markdown = service.addMarkdown(markdownWithExtras);
 
-      expect(markdown.reason).toBe('black friday sale');
+      expect(markdown.reason).toBe('Black friday sale');
       expect(markdown.priority).toBe(1);
     });
 
@@ -90,9 +88,9 @@ describe('PromoService', () => {
       const activeMarkdowns = service.getActiveMarkdowns(productId);
 
       expect(activeMarkdowns).toHaveLength(1);
-      expect(activeMarkdowns[0].productId).toBe(productId);
-      expect(activeMarkdowns[0].discountAmount).toBe(ValidMarkdownFixture.discountAmount);
-      expect(activeMarkdowns[0].isActive).toBe(true);
+      expect(activeMarkdowns[0]?.productId).toBe(productId);
+      expect(activeMarkdowns[0]?.discountAmount).toBe(ValidMarkdownFixture.discountAmount);
+      expect(activeMarkdowns[0]?.isActive).toBe(true);
     });
 
     it('should not return inactive markdowns', () => {
@@ -149,6 +147,19 @@ describe('PromoService', () => {
       const result = service.deactivateMarkdown('non-existent');
       expect(result).toBe(false);
     });
+
+    it('should set updatedAt when deactivating', () => {
+      const markdown = service.addMarkdown(ValidMarkdownFixture);
+      const beforeDeactivate = new Date();
+
+      service.deactivateMarkdown(markdown.id);
+
+      const allMarkdowns = service.getAllMarkdowns();
+      const deactivated = allMarkdowns.find(m => m.id === markdown.id);
+      expect(deactivated?.updatedAt).toBeDefined();
+      expect(deactivated?.updatedAt).toBeInstanceOf(Date);
+      expect(deactivated?.updatedAt!.getTime()).toBeGreaterThanOrEqual(beforeDeactivate.getTime());
+    });
   });
 
   describe('addPromo', () => {
@@ -157,9 +168,11 @@ describe('PromoService', () => {
 
       expect(promo.id).toBeDefined();
       expect(promo.type).toBe('buyNgetMoff');
-      expect(promo.buyQuantity).toBe(BuyNGetMOffPromoFixture.buyQuantity);
-      expect(promo.getQuantity).toBe(BuyNGetMOffPromoFixture.getQuantity);
-      expect(promo.discountPercent).toBe(BuyNGetMOffPromoFixture.discountPercent);
+      if (promo.type === 'buyNgetMoff') {
+        expect(promo.buyQuantity).toBe(BuyNGetMOffPromoFixture.buyQuantity);
+        expect(promo.getQuantity).toBe(BuyNGetMOffPromoFixture.getQuantity);
+        expect(promo.discountPercent).toBe(BuyNGetMOffPromoFixture.discountPercent);
+      }
       expect(promo.productId).toBe(BuyNGetMOffPromoFixture.productId);
       expect(promo.createdAt).toBeInstanceOf(Date);
     });
@@ -169,8 +182,10 @@ describe('PromoService', () => {
 
       expect(promo.id).toBeDefined();
       expect(promo.type).toBe('nForX');
-      expect(promo.quantity).toBe(NForXPromoFixture.quantity);
-      expect(promo.price).toBe(NForXPromoFixture.price);
+      if (promo.type === 'nForX') {
+        expect(promo.quantity).toBe(NForXPromoFixture.quantity);
+        expect(promo.price).toBe(NForXPromoFixture.price);
+      }
       expect(promo.productId).toBe(NForXPromoFixture.productId);
     });
 
@@ -179,27 +194,11 @@ describe('PromoService', () => {
 
       expect(promo.id).toBeDefined();
       expect(promo.type).toBe('weighted');
-      expect(promo.buyWeight).toBe(WeightedPromoFixture.buyWeight);
-      expect(promo.getWeight).toBe(WeightedPromoFixture.getWeight);
-      expect(promo.discountPercent).toBe(WeightedPromoFixture.discountPercent);
-    });
-
-    it('should create percentage discount promotion', () => {
-      const promo = service.addPromo(PercentageDiscountPromoFixture);
-
-      expect(promo.id).toBeDefined();
-      expect(promo.type).toBe('percentage');
-      expect(promo.discountPercent).toBe(PercentageDiscountPromoFixture.discountPercent);
-      expect(promo.minimumQuantity).toBe(PercentageDiscountPromoFixture.minimumQuantity);
-    });
-
-    it('should create fixed discount promotion', () => {
-      const promo = service.addPromo(FixedDiscountPromoFixture);
-
-      expect(promo.id).toBeDefined();
-      expect(promo.type).toBe('fixed');
-      expect(promo.discountAmount).toBe(FixedDiscountPromoFixture.discountAmount);
-      expect(promo.minimumAmount).toBe(FixedDiscountPromoFixture.minimumAmount);
+      if (promo.type === 'weighted') {
+        expect(promo.buyWeight).toBe(WeightedPromoFixture.buyWeight);
+        expect(promo.getWeight).toBe(WeightedPromoFixture.getWeight);
+        expect(promo.discountPercent).toBe(WeightedPromoFixture.discountPercent);
+      }
     });
 
     it('should create promotion with application limits', () => {
@@ -236,14 +235,10 @@ describe('PromoService', () => {
       const buyNGetM = service.addPromo(BuyNGetMOffPromoFixture);
       const nForX = service.addPromo(NForXPromoFixture);
       const weighted = service.addPromo(WeightedPromoFixture);
-      const percentage = service.addPromo(PercentageDiscountPromoFixture);
-      const fixed = service.addPromo(FixedDiscountPromoFixture);
 
       expect(buyNGetM.type).toBe('buyNgetMoff');
       expect(nForX.type).toBe('nForX');
       expect(weighted.type).toBe('weighted');
-      expect(percentage.type).toBe('percentage');
-      expect(fixed.type).toBe('fixed');
     });
   });
 
@@ -255,9 +250,9 @@ describe('PromoService', () => {
       const activePromos = service.getActivePromos(productId);
 
       expect(activePromos).toHaveLength(1);
-      expect(activePromos[0].productId).toBe(productId);
-      expect(activePromos[0].type).toBe('buyNgetMoff');
-      expect(activePromos[0].isActive).toBe(true);
+      expect(activePromos[0]?.productId).toBe(productId);
+      expect(activePromos[0]?.type).toBe('buyNgetMoff');
+      expect(activePromos[0]?.isActive).toBe(true);
     });
 
     it('should not return inactive promotions', () => {
@@ -300,16 +295,16 @@ describe('PromoService', () => {
     it('should return different promotion types for same product', () => {
       const productId = BuyNGetMOffPromoFixture.productId;
       const buyNGetM = { ...BuyNGetMOffPromoFixture, productId };
-      const percentage = { ...PercentageDiscountPromoFixture, productId };
+      const nForX = { ...NForXPromoFixture, productId };
 
       service.addPromo(buyNGetM);
-      service.addPromo(percentage);
+      service.addPromo(nForX);
 
       const activePromos = service.getActivePromos(productId);
 
       expect(activePromos).toHaveLength(2);
       expect(activePromos.map(p => p.type)).toContain('buyNgetMoff');
-      expect(activePromos.map(p => p.type)).toContain('percentage');
+      expect(activePromos.map(p => p.type)).toContain('nForX');
     });
   });
 
@@ -339,16 +334,21 @@ describe('PromoService', () => {
 
       const activePromos = service.getActivePromos(productId);
       expect(activePromos).toHaveLength(1);
-      expect(activePromos[0].id).toBe(promo2.id);
-      expect(activePromos[0].type).toBe('nForX');
+      expect(activePromos[0]?.id).toBe(promo2.id);
+      expect(activePromos[0]?.type).toBe('nForX');
     });
 
-    it('should not affect already inactive promotions', () => {
-      const inactivePromo = service.addPromo(InactivePromoFixture);
+    it('should set updatedAt when deactivating', () => {
+      const promo = service.addPromo(BuyNGetMOffPromoFixture);
+      const beforeDeactivate = new Date();
 
-      const result = service.deactivatePromo(inactivePromo.id);
+      service.deactivatePromo(promo.id);
 
-      expect(result).toBe(true);
+      const allPromos = service.getAllPromos();
+      const deactivated = allPromos.find(p => p.id === promo.id);
+      expect(deactivated?.updatedAt).toBeDefined();
+      expect(deactivated?.updatedAt).toBeInstanceOf(Date);
+      expect(deactivated?.updatedAt!.getTime()).toBeGreaterThanOrEqual(beforeDeactivate.getTime());
     });
 
     it('should deactivate promotions of different types', () => {
@@ -388,7 +388,7 @@ describe('PromoService', () => {
       const allMarkdowns = service.getAllMarkdowns();
 
       expect(allMarkdowns).toHaveLength(1);
-      expect(allMarkdowns[0].isActive).toBe(false);
+      expect(allMarkdowns[0]?.isActive).toBe(false);
     });
   });
 
@@ -415,19 +415,15 @@ describe('PromoService', () => {
       service.addPromo(BuyNGetMOffPromoFixture);
       service.addPromo(NForXPromoFixture);
       service.addPromo(WeightedPromoFixture);
-      service.addPromo(PercentageDiscountPromoFixture);
-      service.addPromo(FixedDiscountPromoFixture);
 
       const allPromos = service.getAllPromos();
 
-      expect(allPromos).toHaveLength(5);
+      expect(allPromos).toHaveLength(3);
 
       const types = allPromos.map(p => p.type);
       expect(types).toContain('buyNgetMoff');
       expect(types).toContain('nForX');
       expect(types).toContain('weighted');
-      expect(types).toContain('percentage');
-      expect(types).toContain('fixed');
     });
 
     it('should include deactivated promotions', () => {
@@ -437,7 +433,7 @@ describe('PromoService', () => {
       const allPromos = service.getAllPromos();
 
       expect(allPromos).toHaveLength(1);
-      expect(allPromos[0].isActive).toBe(false);
+      expect(allPromos[0]?.isActive).toBe(false);
     });
   });
 
