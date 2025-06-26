@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {generateId} from '../core/utils/id-generator'
 import { validateProduct} from '../core/utils/validation'
-import { Product } from '../core/types'
+import {InvalidProductDataFixture} from "./fixtures/product.fixture.ts"
+import { ValidationError } from '../core/errors';
 
 describe("utils test", () => {
   describe("random id generator",() => {
@@ -15,14 +16,8 @@ describe("utils test", () => {
 
 
   describe("validaiton tests", () => {
-    it("should validate product", () => {
-      const product: Product = {
-        name: "test product",
-        price: 100,
-        isWeighted: false
-      }
-      validateProduct(product)
-
+    it("should throw ValidationError for empty name and negative price", () => {
+      expect(() => validateProduct(InvalidProductDataFixture)).toThrow(ValidationError);
     })
   })
 })
