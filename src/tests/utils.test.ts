@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {generateId} from '../core/utils/id-generator'
-import { validateProduct} from '../core/utils/validation'
+import {generateId, validateProduct} from "../core/utils"
 import {InvalidProductDataFixture} from "./fixtures/product.fixture.ts"
 import { ValidationError } from '../core/errors';
 
