@@ -7,5 +7,4 @@ export interface IProductService {
   updateProduct(id: string, updates: Partial<Product>): Product | null;
   deleteProduct(id: string): boolean;
   findProductsByName(name: string): Product[];
-  findProductsByCategory(category: string): Product[];
 }
