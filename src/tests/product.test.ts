@@ -1,6 +1,6 @@
- import { describe, it, expect, beforeEach } from 'vitest';
-import { ProductService } from '../../src/services/product.service';
-import { ValidationError } from '../../src/core/errors';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { ProductService } from '../services/product.service';
+import { ValidationError } from '../core/errors';
 import {
   EmptyNameProductFixture,
   NegativePriceProductFixture,
@@ -101,18 +101,17 @@ describe('ProductService', () => {
       const results = service.findProductsByName(ProductFixture.name);
 
       expect(results).toHaveLength(2);
-      expect(results.every(p => p.name.toLowerCase().includes(ProductFixture.name))).toBe(true);
+      expect(results.some(p => p.name === ProductFixture.name)).toBe(true);
+      expect(results.some(p => p.name === ProductVariant2Fixture.name)).toBe(true);
     });
 
     it('should return empty array for no matches', () => {
       service.addProduct(ProductFixture);
-      // geerateId used to guarntee no false positives
       const results = service.findProductsByName(generateId(10));
 
       expect(results).toHaveLength(0);
     });
   });
-
 
   describe('getAllProducts', () => {
     it('should return empty array when no products', () => {
@@ -130,4 +129,3 @@ describe('ProductService', () => {
     });
   });
 });
-;

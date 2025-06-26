@@ -25,7 +25,7 @@ export class PromoService implements IPromoService {
       markdown.productId === productId &&
       markdown.isActive &&
       markdown.validFrom <= now &&
-      markdown.validTo > now
+      markdown.validTo >= now
     );
   }
 
@@ -69,7 +69,7 @@ export class PromoService implements IPromoService {
       promo.productId === productId &&
       promo.isActive &&
       promo.validFrom <= now &&
-      promo.validTo > now
+      promo.validTo >= now
     );
   }
 

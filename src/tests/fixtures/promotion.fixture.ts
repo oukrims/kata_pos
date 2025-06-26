@@ -2,15 +2,15 @@ import { Markdown, BuyNGetMOffSpecial, NForXSpecial, WeightedSpecial } from "../
 import { faker } from "@faker-js/faker";
 
 const productId = faker.string.alphanumeric(10);
-const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
-const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+const dayBeforeLastWeek = new Date(Date.now() - 8 * 24 * 60 * 60 * 1000);
 
 export const ValidMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'updatedAt'> = {
   productId,
   discountAmount: 0.50,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: true,
   reason: "Test markdown",
@@ -20,8 +20,8 @@ export const ValidMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'updatedA
 export const ExpiredMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'updatedAt'> = {
   productId,
   discountAmount: 0.25,
-  validFrom: lastWeek,
-  validTo: yesterday,
+  validFrom: dayBeforeLastWeek,
+  validTo: lastWeek,
   isActive: true,
   reason: "Expired markdown",
   priority: 1
@@ -30,7 +30,7 @@ export const ExpiredMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'update
 export const InactiveMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'updatedAt'> = {
   productId,
   discountAmount: 0.75,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: false,
   reason: "Inactive markdown",
@@ -40,7 +40,7 @@ export const InactiveMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'updat
 export const NegativeDiscountMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'updatedAt'> = {
   productId,
   discountAmount: -0.50,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: true,
   reason: "Invalid markdown",
@@ -51,7 +51,7 @@ export const InvalidDateMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'up
   productId,
   discountAmount: 0.50,
   validFrom: nextWeek,
-  validTo: tomorrow,
+  validTo: yesterday,
   isActive: true,
   reason: "Invalid date markdown",
   priority: 1
@@ -60,7 +60,7 @@ export const InvalidDateMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'up
 export const EmptyProductIdMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 'updatedAt'> = {
   productId: "",
   discountAmount: 0.50,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: true,
   reason: "Empty product ID",
@@ -70,7 +70,7 @@ export const EmptyProductIdMarkdownFixture: Omit<Markdown, 'id' | 'createdAt' | 
 export const BuyNGetMOffPromoFixture: Omit<BuyNGetMOffSpecial, 'id' | 'createdAt' | 'updatedAt'> = {
   type: 'buyNgetMoff',
   productId,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: true,
   buyQuantity: 2,
@@ -84,7 +84,7 @@ export const BuyNGetMOffPromoFixture: Omit<BuyNGetMOffSpecial, 'id' | 'createdAt
 export const NForXPromoFixture: Omit<NForXSpecial, 'id' | 'createdAt' | 'updatedAt'> = {
   type: 'nForX',
   productId,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: true,
   quantity: 3,
@@ -97,7 +97,7 @@ export const NForXPromoFixture: Omit<NForXSpecial, 'id' | 'createdAt' | 'updated
 export const WeightedPromoFixture: Omit<WeightedSpecial, 'id' | 'createdAt' | 'updatedAt'> = {
   type: 'weighted',
   productId,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: true,
   buyWeight: 1.0,
@@ -111,8 +111,8 @@ export const WeightedPromoFixture: Omit<WeightedSpecial, 'id' | 'createdAt' | 'u
 export const ExpiredPromoFixture: Omit<BuyNGetMOffSpecial, 'id' | 'createdAt' | 'updatedAt'> = {
   type: 'buyNgetMoff',
   productId,
-  validFrom: lastWeek,
-  validTo: yesterday,
+  validFrom: dayBeforeLastWeek,
+  validTo: lastWeek,
   isActive: true,
   buyQuantity: 1,
   getQuantity: 1,
@@ -124,7 +124,7 @@ export const ExpiredPromoFixture: Omit<BuyNGetMOffSpecial, 'id' | 'createdAt' | 
 export const InactivePromoFixture: Omit<NForXSpecial, 'id' | 'createdAt' | 'updatedAt'> = {
   type: 'nForX',
   productId,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: false,
   quantity: 2,
@@ -136,7 +136,7 @@ export const InactivePromoFixture: Omit<NForXSpecial, 'id' | 'createdAt' | 'upda
 export const LimitedPromoFixture: Omit<BuyNGetMOffSpecial, 'id' | 'createdAt' | 'updatedAt'> = {
   type: 'buyNgetMoff',
   productId,
-  validFrom: tomorrow,
+  validFrom: yesterday,
   validTo: nextWeek,
   isActive: true,
   buyQuantity: 1,
