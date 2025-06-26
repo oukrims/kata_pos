@@ -42,3 +42,4 @@ describe('CheckoutService', () => {
     expect(total).toBe(3.00);
   });
 });
+
