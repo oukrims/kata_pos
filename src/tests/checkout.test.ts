@@ -26,4 +26,19 @@ describe('CheckoutService', () => {
 
     expect(total).toBe(1.50);
   });
+
+  it('should calculate total for multiple same items', () => {
+    const apple = productService.addProduct({
+      name: 'Apple',
+      price: 1.50,
+      isWeighted: false,
+      createdAt: new Date()
+    });
+
+    checkout.scan(apple.id);
+    checkout.scan(apple.id);
+    const total = checkout.total();
+
+    expect(total).toBe(3.00);
+  });
 });
