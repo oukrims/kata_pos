@@ -55,4 +55,13 @@ export class CheckoutService {
   reset(): void {
     this.items = [];
   }
+
+  remove(productId: string): boolean {
+    const index = this.items.indexOf(productId);
+    if (index === -1) {
+      return false;
+    }
+    this.items.splice(index, 1);
+    return true;
+  }
 }
