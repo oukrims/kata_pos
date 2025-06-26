@@ -188,7 +188,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addBuyNGetMOffPromo({
         type: 'buyNgetMoff',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -212,7 +212,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addBuyNGetMOffPromo({
         type: 'buyNgetMoff',
         productId: cereal.id,
         validFrom: new Date(Date.now() - 1000),
@@ -239,7 +239,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addBuyNGetMOffPromo({
         type: 'buyNgetMoff',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -267,7 +267,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addNForXPromo({
         type: 'nForX',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -293,7 +293,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addNForXPromo({
         type: 'nForX',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -318,7 +318,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addNForXPromo({
         type: 'nForX',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -344,7 +344,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addWeightedPromo({
         type: 'weighted',
         productId: groundBeef.id,
         validFrom: new Date(Date.now() - 1000),
@@ -367,7 +367,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addWeightedPromo({
         type: 'weighted',
         productId: groundBeef.id,
         validFrom: new Date(Date.now() - 1000),
@@ -392,7 +392,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addBuyNGetMOffPromo({
         type: 'buyNgetMoff',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -419,7 +419,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addNForXPromo({
         type: 'nForX',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -445,7 +445,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addWeightedPromo({
         type: 'weighted',
         productId: groundBeef.id,
         validFrom: new Date(Date.now() - 1000),
@@ -532,7 +532,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addBuyNGetMOffPromo({
         type: 'buyNgetMoff',
         productId: cereal.id,
         validFrom: new Date(Date.now() - 1000),
@@ -560,7 +560,7 @@ describe('CheckoutService', () => {
         createdAt: new Date()
       });
 
-      promoService.addPromo({
+      promoService.addNForXPromo({
         type: 'nForX',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
@@ -656,7 +656,7 @@ describe('CheckoutService', () => {
         isActive: true
       });
 
-      promoService.addPromo({
+      promoService.addBuyNGetMOffPromo({
         type: 'buyNgetMoff',
         productId: soup.id,
         validFrom: new Date(Date.now() - 1000),
